@@ -15,11 +15,13 @@
     "test:bdd": "bddgen && playwright test .feature.spec",
     "test:visual": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual\"",
     "test:visual:update": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual --update-snapshots\"",
+    "test:a11y": "bddgen && playwright test --project=chromium --grep @a11y",
     "lint": "eslint . && prettier --check .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
     "@types/node": "24.19.0",

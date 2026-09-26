@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { step } from '../step';
 
 export class Header {
@@ -23,7 +23,11 @@ export class Header {
 
   @step
   async logout(): Promise<void> {
-    await this.menuButton.click();
+    // react-burger-menu drops a click that lands right after the page mounts.
+    await expect(async () => {
+      await this.menuButton.click();
+      await expect(this.logoutLink).toBeVisible({ timeout: 1_000 });
+    }).toPass();
     await this.logoutLink.click();
   }
 }

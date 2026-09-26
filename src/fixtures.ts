@@ -1,3 +1,4 @@
+import { AxeBuilder } from '@axe-core/playwright';
 import { createBdd, test as base } from 'playwright-bdd';
 import type { Product } from './data/products';
 import { authFile, type Persona } from './data/users';
@@ -13,6 +14,15 @@ interface Options {
   persona: Persona;
 }
 
+interface Violation {
+  rule: string;
+  impact: string | null | undefined;
+  help: string;
+  targets: string[];
+}
+
+const wcag21aa = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
+
 interface Fixtures {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
@@ -22,6 +32,7 @@ interface Fixtures {
   checkoutOverviewPage: CheckoutOverviewPage;
   checkoutCompletePage: CheckoutCompletePage;
   cartItems: Product[];
+  scanAccessibility: () => Promise<Violation[]>;
 }
 
 export const test = base.extend<Options & Fixtures>({
@@ -54,6 +65,27 @@ export const test = base.extend<Options & Fixtures>({
   // eslint-disable-next-line no-empty-pattern -- Playwright requires the destructuring even with no dependencies.
   cartItems: async ({}, use) => {
     await use([]);
+  },
+  scanAccessibility: async ({ page }, use, testInfo) => {
+    await use(async () => {
+      const results = await new AxeBuilder({ page }).withTags(wcag21aa).analyze();
+      await testInfo.attach('axe-results', {
+        body: JSON.stringify(results, null, 2),
+        contentType: 'application/json',
+      });
+      for (const item of results.incomplete) {
+        testInfo.annotations.push({
+          type: 'needs-manual-review',
+          description: `${item.id}: ${item.help} (${String(item.nodes.length)} elements)`,
+        });
+      }
+      return results.violations.map((violation) => ({
+        rule: violation.id,
+        impact: violation.impact,
+        help: violation.help,
+        targets: violation.nodes.map((node) => node.target.join(' ')),
+      }));
+    });
   },
 });
 

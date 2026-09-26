@@ -10,7 +10,7 @@ defineBddConfig({
   outputDir: 'tests',
 });
 
-const chromiumOnly = /@visual/;
+const chromiumOnly = /@visual|@a11y/;
 
 export default defineConfig({
   testDir: 'tests',
