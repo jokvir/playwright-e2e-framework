@@ -1,4 +1,5 @@
-import { test as base } from '@playwright/test';
+import { createBdd, test as base } from 'playwright-bdd';
+import type { Product } from './data/products';
 import { authFile, type Persona } from './data/users';
 import { CartPage } from './pages/cart-page';
 import { CheckoutCompletePage } from './pages/checkout-complete-page';
@@ -12,7 +13,7 @@ interface Options {
   persona: Persona;
 }
 
-interface Pages {
+interface Fixtures {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   productPage: ProductPage;
@@ -20,12 +21,14 @@ interface Pages {
   checkoutInfoPage: CheckoutInfoPage;
   checkoutOverviewPage: CheckoutOverviewPage;
   checkoutCompletePage: CheckoutCompletePage;
+  cartItems: Product[];
 }
 
-export const test = base.extend<Options & Pages>({
+export const test = base.extend<Options & Fixtures>({
   persona: ['standard_user', { option: true }],
-  storageState: async ({ persona }, use) => {
-    await use(authFile(persona));
+  storageState: async ({ persona }, use, testInfo) => {
+    const guest = testInfo.tags.includes('@guest');
+    await use(guest ? { cookies: [], origins: [] } : authFile(persona));
   },
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
@@ -48,6 +51,12 @@ export const test = base.extend<Options & Pages>({
   checkoutCompletePage: async ({ page }, use) => {
     await use(new CheckoutCompletePage(page));
   },
+  // eslint-disable-next-line no-empty-pattern -- Playwright requires the destructuring even with no dependencies.
+  cartItems: async ({}, use) => {
+    await use([]);
+  },
 });
+
+export const { Given, When, Then } = createBdd(test);
 
 export { expect } from '@playwright/test';

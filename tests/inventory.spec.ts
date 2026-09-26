@@ -35,6 +35,7 @@ for (const product of catalog) {
       await inventoryPage.openProduct(product.name);
 
       await expect(page).toHaveURL(`/inventory-item.html?id=${String(product.id)}`);
+      await expect(productPage.backButton).toBeVisible();
       await expect(productPage.name).toHaveText(product.name);
       await expect(productPage.description).toHaveText(product.description);
       await expect(productPage.price).toHaveText(formatPrice(product.price));

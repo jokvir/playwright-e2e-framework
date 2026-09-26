@@ -24,10 +24,10 @@ export class CheckoutInfoPage extends BasePage {
   }
 
   @step
-  async submit(customer: Customer): Promise<void> {
-    await this.firstNameInput.fill(customer.firstName);
-    await this.lastNameInput.fill(customer.lastName);
-    await this.postalCodeInput.fill(customer.postalCode);
+  async submit({ firstName, lastName, postalCode }: Customer): Promise<void> {
+    if (firstName) await this.firstNameInput.fill(firstName);
+    if (lastName) await this.lastNameInput.fill(lastName);
+    if (postalCode) await this.postalCodeInput.fill(postalCode);
     await this.continueButton.click();
   }
 }
