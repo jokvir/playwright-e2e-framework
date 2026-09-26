@@ -13,6 +13,8 @@
     "test": "bddgen && playwright test",
     "test:smoke": "bddgen && playwright test --grep @smoke",
     "test:bdd": "bddgen && playwright test .feature.spec",
+    "test:visual": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual\"",
+    "test:visual:update": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual --update-snapshots\"",
     "lint": "eslint . && prettier --check .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write ."

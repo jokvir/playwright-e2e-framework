@@ -1,18 +1,18 @@
 import { customer, orderSummary } from '../src/data/checkout';
 import { catalog, formatPrice, products } from '../src/data/products';
 import { expect, test } from '../src/fixtures';
-
-function knownDefect(id: string, description: string) {
-  return {
-    tag: '@regression',
-    annotation: { type: 'known-defect', description: `${id}: ${description}` },
-  };
-}
+import { knownDefect } from '../src/known-defect';
 
 test.describe('standard_user', () => {
   test.fail(
     'item total is rounded to cents',
-    knownDefect('SD-005', 'item total shows floating-point digits, e.g. $121.94999999999999'),
+    {
+      tag: '@regression',
+      annotation: knownDefect(
+        'SD-005',
+        'item total shows floating-point digits, e.g. $121.94999999999999',
+      ),
+    },
     async ({ inventoryPage, cartPage, checkoutInfoPage, checkoutOverviewPage }) => {
       // The app sums prices as floats in the order they were added; this order hits the drift.
       const items = [
@@ -43,7 +43,10 @@ test.describe('problem_user', () => {
 
   test.fail(
     'every product shows its own image',
-    knownDefect('SD-001', 'all products show the same placeholder image'),
+    {
+      tag: '@regression',
+      annotation: knownDefect('SD-001', 'all products show the same placeholder image'),
+    },
     async ({ inventoryPage }) => {
       await inventoryPage.goto();
       await expect(inventoryPage.itemImages).toHaveCount(catalog.length);
@@ -58,7 +61,13 @@ test.describe('problem_user', () => {
 
   test.fail(
     'shipping details can be submitted',
-    knownDefect('SD-002', 'typing in Last Name overwrites First Name, so checkout is blocked'),
+    {
+      tag: '@regression',
+      annotation: knownDefect(
+        'SD-002',
+        'typing in Last Name overwrites First Name, so checkout is blocked',
+      ),
+    },
     async ({ page, checkoutInfoPage }) => {
       await checkoutInfoPage.goto();
 
@@ -74,7 +83,13 @@ test.describe('error_user', () => {
 
   test.fail(
     'an order can be finished',
-    knownDefect('SD-003', 'Finish throws a JavaScript error and the order is never placed'),
+    {
+      tag: '@regression',
+      annotation: knownDefect(
+        'SD-003',
+        'Finish throws a JavaScript error and the order is never placed',
+      ),
+    },
     async ({
       inventoryPage,
       cartPage,
@@ -100,7 +115,10 @@ test.describe('visual_user', () => {
 
   test.fail(
     'product prices match the catalog',
-    knownDefect('SD-004', 'prices on the products page are random on every load'),
+    {
+      tag: '@regression',
+      annotation: knownDefect('SD-004', 'prices on the products page are random on every load'),
+    },
     async ({ inventoryPage }) => {
       await inventoryPage.goto();
 

@@ -30,6 +30,9 @@ export default defineConfig(
   {
     files: ['tests/**/*.ts'],
     extends: [playwright.configs['flat/recommended']],
+    rules: {
+      'playwright/no-skipped-test': ['warn', { allowConditional: true }],
+    },
   },
   prettier,
 );

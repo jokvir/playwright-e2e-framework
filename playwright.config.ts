@@ -10,6 +10,8 @@ defineBddConfig({
   outputDir: 'tests',
 });
 
+const chromiumOnly = /@visual/;
+
 export default defineConfig({
   testDir: 'tests',
   fullyParallel: true,
@@ -17,6 +19,7 @@ export default defineConfig({
   workers: 4,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  updateSnapshots: process.env.CI ? 'none' : 'missing',
   reporter: process.env.CI ? [['blob'], ['github']] : [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: process.env.BASE_URL,
@@ -28,8 +31,23 @@ export default defineConfig({
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
     { name: 'chromium', use: { ...devices['Desktop Chrome'] }, dependencies: ['setup'] },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, dependencies: ['setup'] },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, dependencies: ['setup'] },
-    { name: 'mobile-chrome', use: { ...devices['Pixel 7'] }, dependencies: ['setup'] },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      dependencies: ['setup'],
+      grepInvert: chromiumOnly,
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      dependencies: ['setup'],
+      grepInvert: chromiumOnly,
+    },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 7'] },
+      dependencies: ['setup'],
+      grepInvert: chromiumOnly,
+    },
   ],
 });
