@@ -1,0 +1,30 @@
+{
+  "name": "playwright-e2e-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "End-to-end test framework for Sauce Demo built with Playwright and TypeScript",
+  "license": "MIT",
+  "author": "Shones Tegang (https://github.com/jokvir)",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "lint": "eslint . && prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.0",
+    "eslint": "10.11.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-playwright": "2.12.0",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1"
+  }
+}
