@@ -13,7 +13,7 @@ export class Header {
     this.cartBadge = page.getByTestId('shopping-cart-badge');
     this.cartLink = page.getByTestId('shopping-cart-link');
     this.menuButton = page.getByRole('button', { name: 'Open Menu' });
-    this.logoutLink = page.getByTestId('logout-sidebar-link');
+    this.logoutLink = page.getByRole('button', { name: 'Logout' });
   }
 
   @step
@@ -23,11 +23,11 @@ export class Header {
 
   @step
   async logout(): Promise<void> {
-    // react-burger-menu drops a click that lands right after the page mounts.
+    // The burger menu re-mounts right after the page renders, which can swallow the open click
+    // or close the menu again, so the whole open-then-click gesture is retried.
     await expect(async () => {
-      await this.menuButton.click();
-      await expect(this.logoutLink).toBeVisible({ timeout: 1_000 });
+      await this.menuButton.click({ timeout: 2_000 });
+      await this.logoutLink.click({ timeout: 2_000 });
     }).toPass();
-    await this.logoutLink.click();
   }
 }

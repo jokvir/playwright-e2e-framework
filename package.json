@@ -16,6 +16,7 @@
     "test:visual": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual\"",
     "test:visual:update": "docker compose run --rm playwright sh -c \"npm ci && npm test -- --project=chromium --grep @visual --update-snapshots\"",
     "test:a11y": "bddgen && playwright test --project=chromium --grep @a11y",
+    "report": "allure generate allure-results --open",
     "lint": "eslint . && prettier --check .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write ."
@@ -25,6 +26,8 @@
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
     "@types/node": "24.19.0",
+    "allure": "3.18.0",
+    "allure-playwright": "3.12.2",
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-playwright": "2.12.0",

@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, type ReporterDescription } from '@playwright/test';
 import { defineBddConfig } from 'playwright-bdd';
 
 process.loadEnvFile(existsSync('.env') ? '.env' : '.env.example');
@@ -11,16 +11,20 @@ defineBddConfig({
 });
 
 const chromiumOnly = /@visual|@a11y/;
+const allure: ReporterDescription = ['allure-playwright'];
 
 export default defineConfig({
   testDir: 'tests',
+  globalSetup: './src/global-setup.ts',
   fullyParallel: true,
   // Caps concurrent sessions on a third-party site; 8 workers also crashed Firefox contexts on Windows.
   workers: 4,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   updateSnapshots: process.env.CI ? 'none' : 'missing',
-  reporter: process.env.CI ? [['blob'], ['github']] : [['list'], ['html', { open: 'never' }]],
+  reporter: process.env.CI
+    ? [['blob'], ['github'], allure]
+    : [['list'], ['html', { open: 'never' }], allure],
   use: {
     baseURL: process.env.BASE_URL,
     testIdAttribute: 'data-test',

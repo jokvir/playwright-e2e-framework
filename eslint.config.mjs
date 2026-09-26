@@ -13,6 +13,7 @@ export default defineConfig(
       'blob-report',
       'allure-results',
       'allure-report',
+      'allure-history',
       'tests/features',
     ],
   },
