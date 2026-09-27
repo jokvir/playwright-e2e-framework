@@ -186,7 +186,7 @@ Pushes run only the smoke suite, workers are capped at 4 and there is no load te
 
 ## Report
 
-![Allure report of a CI run](docs/images/allure-report.png)
+![Allure report of a full regression run in CI](docs/images/allure-report.png)
 
 ## Possible next steps
 

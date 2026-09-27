@@ -25,8 +25,8 @@ Feature: Login
     Examples:
       | case             | username      | password     | error                                                                     |
       | a wrong password | standard_user | wrong_sauce  | Epic sadface: Username and password do not match any user in this service |
-      | an unknown user  | unknown_user  | secret_sauce | Epic sadface: Username and password do not match any user in this service |
-      | no username      |               | secret_sauce | Epic sadface: Username is required                                        |
+      | an unknown user  | unknown_user  | any_password | Epic sadface: Username and password do not match any user in this service |
+      | no username      |               | any_password | Epic sadface: Username is required                                        |
       | no password      | standard_user |              | Epic sadface: Password is required                                        |
 
   @smoke

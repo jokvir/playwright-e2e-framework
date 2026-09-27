@@ -14,7 +14,7 @@ export const customer: Customer = {
 
 const taxRate = 0.08;
 
-export interface OrderSummary {
+interface OrderSummary {
   itemTotal: number;
   tax: number;
   total: number;

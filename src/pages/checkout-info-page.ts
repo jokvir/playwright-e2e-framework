@@ -7,19 +7,19 @@ import { Header } from './header';
 export class CheckoutInfoPage extends BasePage {
   protected readonly path = '/checkout-step-one.html';
   readonly header: Header;
-  readonly firstNameInput: Locator;
-  readonly lastNameInput: Locator;
-  readonly postalCodeInput: Locator;
   readonly error: Locator;
+  private readonly firstNameInput: Locator;
+  private readonly lastNameInput: Locator;
+  private readonly postalCodeInput: Locator;
   private readonly continueButton: Locator;
 
   constructor(page: Page) {
     super(page);
     this.header = new Header(page);
+    this.error = page.getByTestId('error');
     this.firstNameInput = page.getByTestId('firstName');
     this.lastNameInput = page.getByTestId('lastName');
     this.postalCodeInput = page.getByTestId('postalCode');
-    this.error = page.getByTestId('error');
     this.continueButton = page.getByTestId('continue');
   }
 

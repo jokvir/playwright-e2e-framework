@@ -5,17 +5,17 @@ import { BasePage } from './base-page';
 
 export class LoginPage extends BasePage {
   protected readonly path = '/';
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly error: Locator;
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.usernameInput = page.getByTestId('username');
-    this.passwordInput = page.getByTestId('password');
     this.loginButton = page.getByTestId('login-button');
     this.error = page.getByTestId('error');
+    this.usernameInput = page.getByTestId('username');
+    this.passwordInput = page.getByTestId('password');
   }
 
   @step
